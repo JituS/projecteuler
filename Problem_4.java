@@ -1,5 +1,13 @@
+import java.util.Arrays;
+
 class Problem_4{
-	public static boolean isPalindrome(int number){
+	private int digit;
+
+	public Problem_4(int digit){
+		this.digit = digit;
+	}
+
+	private boolean isPalindrome(int number){
 		int reverse = 0, copy = number;
 		while(copy != 0){
 			reverse *= 10;
@@ -9,36 +17,44 @@ class Problem_4{
 		return number == reverse;
 	}
 
-	public static int find_second_factors(int max, int divide_with){
+	private int find_second_factors(int max, int divide_with){
 		int remainder = max % divide_with;
 		if(remainder == 0) return max/divide_with;
 		return 0;
 	}
 
-	public static boolean isValid(int first_factor,int second_factor){
-		return ((second_factor < 1000 && second_factor > 99) && (first_factor < 1000 && first_factor > 99));
+	private boolean isValid(int first_factor,int second_factor, int max_limit, int min_limit){
+		return ((second_factor <= max_limit && second_factor >= min_limit) && (first_factor <= max_limit && first_factor >= min_limit));
 	}
 
-	public static int[] find_palindrom(){
-		int max = 999 * 999;
+	public int[] find_palindrom(){
+		String maximum = "9";
+		String minimum = "1";
+		for(int i  = 0;i < this.digit-1;i++){
+			maximum+="9";
+			minimum+="0";
+		};
+		int max_limit = Integer.parseInt(maximum);
+		int min_limit = Integer.parseInt(minimum);
+
+		int maximum_possible_number = max_limit * max_limit;
 		while(true){
-			int first_factor = 999;
-			if(isPalindrome(max)){
-				while(first_factor > 100){
-					int second_factor = find_second_factors(max, first_factor);
-					if(isValid(first_factor,second_factor)){
+			int first_factor = max_limit;
+			if(isPalindrome(maximum_possible_number)){
+				while(first_factor > min_limit){
+					int second_factor = find_second_factors(maximum_possible_number, first_factor);
+					if(isValid(first_factor,second_factor, max_limit, min_limit)){
 						return new int[]{first_factor, second_factor};
 					}
 					first_factor--;
 				}
 			};
-			max--;
+			maximum_possible_number--;
 		}
 	};
 
 	public static void main(String[] args) {
-		int[] a = find_palindrom();
-		System.out.println(a[0]);
-		System.out.println(a[1]);
+		Problem_4 palindrom1 = new Problem_4(3);
+		System.out.println(Arrays.toString(palindrom1.find_palindrom()));
 	}
 }
